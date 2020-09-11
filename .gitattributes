@@ -1,0 +1,10 @@
+# Linguist settings 
+* linguist-vendored=true
+
+# C headers
+*.h linguist-vendored=false
+*.h linguist-language=C
+
+# C sources
+*.c linguist-vendored=false
+*.c linguist-language=C

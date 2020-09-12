@@ -51,8 +51,6 @@ int write_header(const char* disk, lifs_header_t* header)
 
     fscanf(file, "%d", &(header->lifs_jump));
 
-    printf("%d\n", header->lifs_bitmap);
-
     fseek(file, 0, SEEK_SET);
 
     fwrite(header, _LIFS_HEADER_SIZE_, 1, file);

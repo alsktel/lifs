@@ -18,7 +18,7 @@ uint32_t set_uid()
 }
 
 lifs_header_t* 
-    create_header(uint32_t disk_size, lifs_bitmap_t* bitmap)
+    create_header(uint32_t disk_size)
 {
     if(disk_size < 5)
     {
@@ -34,7 +34,7 @@ lifs_header_t*
     header.lifs_bitmap = _LIFS_BITMAP_FIRST_SECTOR_;
     header.lifs_bitmap_size = get_bitmap_size_s(disk_size);
     header.lifs_partition = 
-        bitmap->size + _LIFS_BITMAP_FIRST_SECTOR_;
+        header.lifs_bitmap_size + _LIFS_BITMAP_FIRST_SECTOR_;
     header.lifs_uid = set_uid();
 
     return &header;

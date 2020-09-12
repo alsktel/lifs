@@ -30,7 +30,7 @@ typedef struct
 // Creates LIFS header image for disk with specific size
 // Returns pointer to LIFS header image
 lifs_header_t* 
-    create_header(uint32_t disk_size, lifs_bitmap_t* bitmap);
+    create_header(uint32_t disk_size);
 
 // Writes data from LIFS header image 'header' to disk 'disk'
 // Returns error code

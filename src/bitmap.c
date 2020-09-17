@@ -9,20 +9,20 @@
 #include <lifs_commons.h>
 #include <lifs_bitmap.h>
 
-uint32_t get_bitmap_size_s(uint32_t disk_size)
+uint32_t get_bitmap_size_s(uint32_t fs_size)
 {
-    uint32_t byte_size = get_bitmap_size_b(disk_size);
+    uint32_t byte_size = get_bitmap_size_b(fs_size);
 
     return byte_size % _LIFS_SECTOR_SIZE_ == 0 ? 
         byte_size / _LIFS_SECTOR_SIZE_ : 
         byte_size / _LIFS_SECTOR_SIZE_ + 1;
 }
 
-uint32_t get_bitmap_size_b(uint32_t disk_size)
+uint32_t get_bitmap_size_b(uint32_t fs_size)
 {
-    return disk_size % _LIFS_BITMAP_SECTORS_PER_BYTE_ == 0 ? 
-        disk_size / _LIFS_BITMAP_SECTORS_PER_BYTE_ : 
-        disk_size / _LIFS_BITMAP_SECTORS_PER_BYTE_ + 1;
+    return fs_size % _LIFS_BITMAP_SECTORS_PER_BYTE_ == 0 ? 
+        fs_size / _LIFS_BITMAP_SECTORS_PER_BYTE_ : 
+        fs_size / _LIFS_BITMAP_SECTORS_PER_BYTE_ + 1;
 }
 
 void clear_bitmap(lifs_bitmap_t* bitmap)
@@ -30,16 +30,17 @@ void clear_bitmap(lifs_bitmap_t* bitmap)
     free(bitmap->bytes);
 }
 
-lifs_bitmap_t* create_bitmap(uint32_t disk_size)
+lifs_bitmap_t* create_bitmap(uint32_t fs_size, uint32_t start)
 {
-    if(disk_size < _LIFS_MIN_FS_SIZE_)
+    if(fs_size < _LIFS_MIN_FS_SIZE_)
     {
         return 0;
     }
 
     static lifs_bitmap_t bitmap;
 
-    bitmap.size = get_bitmap_size_b(disk_size);
+    bitmap.sector = start + _LIFS_BITMAP_FIRST_SECTOR_;
+    bitmap.size = get_bitmap_size_b(fs_size);
     bitmap.bytes = malloc(bitmap.size);
 
     for(int i = 0; i < bitmap.size; i++)
@@ -53,7 +54,7 @@ lifs_bitmap_t* create_bitmap(uint32_t disk_size)
             1 << (i % _LIFS_BITMAP_SECTORS_PER_BYTE_);
     }
 
-    for(int i = 0; i < get_bitmap_size_s(disk_size); i++)
+    for(int i = 0; i < get_bitmap_size_s(fs_size); i++)
     {
         bitmap.bytes[(i + _LIFS_BITMAP_FIRST_SECTOR_) / 
             _LIFS_BITMAP_SECTORS_PER_BYTE_] |= 1 << 
@@ -64,8 +65,7 @@ lifs_bitmap_t* create_bitmap(uint32_t disk_size)
     return &bitmap;
 }
 
-int bitmap_mark_sector(lifs_bitmap_t* bitmap, 
-    uint32_t sector, uint8_t mark)
+int bitmap_mark_sector(lifs_bitmap_t* bitmap, uint32_t sector, uint8_t mark)
 {
     if(bitmap->size < sector / _LIFS_BITMAP_SECTORS_PER_BYTE_)
     {
@@ -96,7 +96,7 @@ int update_bitmap(const char* disk, lifs_bitmap_t* bitmap)
         return -1;
     }
 
-    fseek(dd, _LIFS_BITMAP_FIRST_SECTOR_ * _LIFS_SECTOR_SIZE_, 0);
+    fseek(dd, bitmap->sector * _LIFS_SECTOR_SIZE_, 0);
     fwrite(bitmap->bytes, bitmap->size, 1, dd);
 
     uint8_t last_byte = bitmap->size % _LIFS_SECTOR_SIZE_;

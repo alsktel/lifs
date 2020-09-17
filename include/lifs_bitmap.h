@@ -18,19 +18,19 @@ typedef struct
 {
     uint8_t* bytes; // Each byte contains flags for 8 sectors
     uint32_t size; // Size in bytes
+    uint32_t sector; // Bitmap start absolute sector 
 } lifs_bitmap_t;
 
-// Creates bitmap image for LIFS
+// Creates bitmap image starts on sector 'start' on disk
 // Returns pointer to bitmap 
-lifs_bitmap_t* create_bitmap(uint32_t disk_size);
+lifs_bitmap_t* create_bitmap(uint32_t fs_size, uint32_t start);
 
 // Marks specific sector field in bitmap image 'bitmap'
 // with value from 'mark'
 // NOTICE: Use macroses defined in this file (_LIFS_BITMAP_MARK_*) 
 // as values of 'mark' 
 // Returns error code
-int bitmap_mark_sector(lifs_bitmap_t* bitmap, 
-    uint32_t sector, uint8_t mark);
+int bitmap_mark_sector(lifs_bitmap_t* bitmap, uint32_t sector, uint8_t mark);
 
 // Updates bitmap sectors on disk 'disk' with data 
 // from bitmap image 'bitmap' 
@@ -38,10 +38,10 @@ int bitmap_mark_sector(lifs_bitmap_t* bitmap,
 int update_bitmap(const char* disk, lifs_bitmap_t* bitmap);
 
 // Returns bitmap size in sectors
-uint32_t get_bitmap_size_s(uint32_t disk_size);
+uint32_t get_bitmap_size_s(uint32_t fs_size);
 
 // Returns bitmap size in bytes
-uint32_t get_bitmap_size_b(uint32_t disk_size);
+uint32_t get_bitmap_size_b(uint32_t fs_size);
 
 // Clears bitmap image, frees allocated memory
 void clear_bitmap(lifs_bitmap_t* bitmap);

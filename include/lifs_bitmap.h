@@ -8,7 +8,6 @@
 
 #include <stdint.h>
 
-#define _LIFS_BITMAP_FIRST_SECTOR_ 2
 #define _LIFS_BITMAP_SECTORS_PER_BYTE_ 8
 #define _LIFS_BITMAP_MARK_FREE_ 0
 #define _LIFS_BITMAP_MARK_USED_ 1

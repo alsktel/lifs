@@ -39,7 +39,7 @@ lifs_bitmap_t* create_bitmap(uint32_t fs_size, uint32_t start)
 
     static lifs_bitmap_t bitmap;
 
-    bitmap.sector = start + _LIFS_BITMAP_FIRST_SECTOR_;
+    bitmap.sector = start;
     bitmap.size = get_bitmap_size_b(fs_size);
     bitmap.bytes = malloc(bitmap.size);
 
@@ -48,18 +48,10 @@ lifs_bitmap_t* create_bitmap(uint32_t fs_size, uint32_t start)
         bitmap.bytes[i] = 0;
     }
 
-    for(int i = 0; i < _LIFS_BITMAP_FIRST_SECTOR_; i++)
+    for(int i = 0; i < get_bitmap_size_s(fs_size) + 1; i++)
     {
         bitmap.bytes[i / _LIFS_BITMAP_SECTORS_PER_BYTE_] |= 
             1 << (i % _LIFS_BITMAP_SECTORS_PER_BYTE_);
-    }
-
-    for(int i = 0; i < get_bitmap_size_s(fs_size); i++)
-    {
-        bitmap.bytes[(i + _LIFS_BITMAP_FIRST_SECTOR_) / 
-            _LIFS_BITMAP_SECTORS_PER_BYTE_] |= 1 << 
-            ((i + _LIFS_BITMAP_FIRST_SECTOR_) %
-             _LIFS_BITMAP_SECTORS_PER_BYTE_);
     }
 
     return &bitmap;

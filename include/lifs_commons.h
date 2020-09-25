@@ -12,7 +12,7 @@
 
 // Common defines for LIFS
 #define _LIFS_SECTOR_SIZE_ 512
-#define _LIFS_MIN_FS_SIZE_ 7
+#define _LIFS_MIN_FS_SIZE_ 8
 #define _LIFS_NAMES_LEN_ 256
 
 // Finds first free sector

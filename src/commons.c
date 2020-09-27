@@ -3,6 +3,8 @@
 
 // This file is a part of LIFS creation tool
 
+#include <time.h>
+
 #include <lifs_commons.h>
 
 uint32_t find_first_free_sector(lifs_bitmap_t* bitmap)
@@ -27,4 +29,9 @@ uint32_t find_first_free_sector(lifs_bitmap_t* bitmap)
     }
 
     return i * _LIFS_BITMAP_SECTORS_PER_BYTE_ + j;
+}
+
+uint32_t get_time_fts()
+{
+    return _FLIX_TIMESTAMP_BASE_ + time(NULL);
 }

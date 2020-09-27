@@ -20,7 +20,7 @@ uint32_t set_uid()
 }
 
 lifs_header_t* create_header(uint32_t size, uint32_t start, 
-    uint32_t label, uint32_t flags, uint32_t previous, uint32_t next)
+    uint32_t label, uint32_t flags, uint32_t previous)
 {
     if(size < _LIFS_MIN_FS_SIZE_)
     {
@@ -44,7 +44,7 @@ lifs_header_t* create_header(uint32_t size, uint32_t start,
     header.mount = 0;
     header.sys = 0;
     header.previous = previous;
-    header.next = next;
+    header.next = 0;
 
     for(int i = 0; i < _LIFS_HEADER_RESERVED_SIZE_; i++)
     {
@@ -66,6 +66,16 @@ int write_header(const char* disk, lifs_header_t* header)
     fseek(dd, header->sector * _LIFS_SECTOR_SIZE_, 0);
     fwrite(header, _LIFS_HEADER_SIZE_, 1, dd);
 
+    if(header->previous != 0)
+    {
+        printf("%d\n", header->size);
+
+        fseek(dd, header->previous * _LIFS_SECTOR_SIZE_, 0);
+        fseek(dd, _LIFS_HEADER_NEXT_FIELD_, SEEK_CUR);
+        fwrite((void*)header + _LIFS_HEADER_SECTOR_FIELD_, 
+            sizeof(uint32_t), 1, dd);
+    }
+    
     fclose(dd);
 
     return 0;

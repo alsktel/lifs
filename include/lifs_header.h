@@ -18,6 +18,8 @@
 #define _LIFS_LABEL_BOOT_ 0x544F4F42
 #define _LIFS_LABEL_ROOT_ 0x544F4F52
 #define _LIFS_LABEL_DATA_ 0x41544144
+#define _LIFS_HEADER_NEXT_FIELD_ 60
+#define _LIFS_HEADER_SECTOR_FIELD_ 16
 
 // This struct describes LIFS header
 typedef struct 
@@ -45,7 +47,7 @@ typedef struct
 // with specific label (NOTE! Use macroses for labels)
 // Returns pointer to LIFS header image
 lifs_header_t* create_header(uint32_t size, uint32_t start, 
-    uint32_t label, uint32_t flags, uint32_t previous, uint32_t next);
+    uint32_t label, uint32_t flags, uint32_t previous);
 
 // Writes data from LIFS header image 'header' to disk 'disk'
 // Returns error code

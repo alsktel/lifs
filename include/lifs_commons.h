@@ -24,4 +24,12 @@ uint32_t find_first_free_sector(lifs_bitmap_t* bitmap);
 // Returns time in FLIX timestamp
 uint32_t get_time_fts();
 
+// Convert file name from 'const char*' to char[_LIFS_NAMES_LEN_]
+// Returns error code
+int convert_file_name(const char* name, uint8_t* converted);
+
+// Gets file name from path 
+// Returns file name 
+char* get_file_name(char* path);
+
 #endif

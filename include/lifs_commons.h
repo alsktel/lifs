@@ -30,6 +30,6 @@ int convert_file_name(const char* name, uint8_t* converted);
 
 // Gets file name from path 
 // Returns file name 
-char* get_file_name(char* path);
+const char* get_file_name(const char* path);
 
 #endif

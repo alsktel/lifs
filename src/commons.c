@@ -65,25 +65,26 @@ int convert_file_name(const char* name, uint8_t* converted)
     return 0;
 }
 
-char* get_file_name(char* path)
+const char* get_file_name(const char* path)
 {
-    char sep[3] = "/\\";
     char* token;
-    char* name;
+    char* name = malloc(strlen(path));
+    char p[strlen(path)];
 
-    token = strtok(path, sep);
+    strcpy(p, path);
+
+    token = strtok(p, "/");
 
     if(token == NULL)
     {
         return path;
     }
 
-    do
+    while(token != NULL)
     {
-        name = token;
-        token = strtok(NULL, sep);
+        strcpy(name, token);
+        token = strtok(NULL, "/");
     }
-    while(token != NULL);
 
     return name;
 }

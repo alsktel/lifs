@@ -142,8 +142,6 @@ uint32_t convert_file(const char* file, const char* disk, uint32_t partition,
         (ftell(fd) + 1) / _LIFS_SECTOR_SIZE_ : (ftell(fd) + 1) / 
         _LIFS_SECTOR_SIZE_ + 1;
 
-    fclose(fd);
-
     lifs_file_t* header = create_file(get_file_name(file), flags, size, 
         sector, size > 0 ? sector + 1 : 0, parent, previous);
 
@@ -180,10 +178,14 @@ uint32_t convert_file(const char* file, const char* disk, uint32_t partition,
         return 0;
     }
 
-    fseek(dd, (partition + previous) * _LIFS_SECTOR_SIZE_, 0);
-    fseek(dd, _LIFS_FILE_NEXT_FIELD_OFFSET_, SEEK_CUR);
-    fwrite((void*)header + _LIFS_FILE_SECTOR_FIELD_OFFSET_, 
-        sizeof(uint32_t), 1, dd);
+    if(previous != 0)
+    {
+        fseek(dd, (partition + previous) * _LIFS_SECTOR_SIZE_, 0);
+        fseek(dd, _LIFS_FILE_NEXT_FIELD_OFFSET_, SEEK_CUR);
+        fwrite((void*)header + _LIFS_FILE_SECTOR_FIELD_OFFSET_, 
+            sizeof(uint32_t), 1, dd);
+
+    }
 
     fclose(dd);
 

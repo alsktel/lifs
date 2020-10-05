@@ -48,7 +48,9 @@ lifs_bitmap_t* create_bitmap(uint32_t fs_size, uint32_t start)
         bitmap.bytes[i] = 0;
     }
 
-    for(int i = 0; i < get_bitmap_size_s(fs_size) + 1; i++)
+    bitmap.bytes[0] = 1;
+
+    for(int i = 1; i < get_bitmap_size_s(fs_size) + 1; i++)
     {
         bitmap.bytes[i / _LIFS_BITMAP_SECTORS_PER_BYTE_] |= 
             1 << (i % _LIFS_BITMAP_SECTORS_PER_BYTE_);
@@ -83,7 +85,7 @@ int update_bitmap(const char* disk, lifs_bitmap_t* bitmap)
 {
     FILE* dd = fopen(disk, "r+b");
 
-    if(dd < 0)
+    if(dd == NULL)
     {
         return -1;
     }

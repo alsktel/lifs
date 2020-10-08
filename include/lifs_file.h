@@ -37,14 +37,6 @@ typedef struct
     uint8_t reserved[_LIFS_FILE_RESERVED_SIZE_]; // Reserved
 } lifs_file_t;
 
-// This struct describes file data node
-typedef struct
-{
-    uint32_t previous; // Local id of sector with previous list
-    uint32_t sectors[_LIFS_NODE_DATA_COUNT_]; // 126 local sectors ids of data
-    uint32_t next; // Local id of sector with next list
-} lifs_file_node_t;
-
 // Creates file header with specific parameters
 // Returns pointer to header
 lifs_file_t* create_file(const char* name, uint32_t flags, uint32_t size, 
@@ -56,14 +48,9 @@ lifs_file_t* create_file(const char* name, uint32_t flags, uint32_t size,
 uint32_t convert_file(const char* file, const char* disk, uint32_t partition,
     uint32_t previous, uint32_t parent, uint32_t flags, lifs_bitmap_t* bitmap);
 
-// Creates file data nodes list in 'nodes' ('nodes' must be NULL)
-// Returns quantity of nodes
-uint32_t create_nodes(lifs_file_node_t** nodes, 
-    uint32_t size, lifs_bitmap_t* bitmap);
-
 // Writes file and file data to disk partition with LIFS
 // Returns error code
-int write_file(lifs_file_t* header, lifs_file_node_t* nodes, uint32_t count,
-    const char* disk, uint32_t partition, const char* file);
+int write_file(lifs_file_t* header, const char* disk, uint32_t partition, 
+    const char* file);
 
 #endif

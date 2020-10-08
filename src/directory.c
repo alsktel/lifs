@@ -28,7 +28,11 @@ uint32_t convert_dir(const char* path, const char* disk, uint32_t partition,
 
     while((ent = readdir(dir)) != NULL)
     {
-        ent_count++;
+        if(strcmp(ent->d_name, ".") != 0 
+            && strcmp(ent->d_name, "..") != 0)
+        {
+            ent_count++;
+        }
     }
 
     char* name = get_file_name(path);
@@ -137,7 +141,7 @@ uint32_t create_lifs(const char* disk, uint32_t previous, uint32_t start,
 
     if(dir == NULL)
     {
-        printf("%s <%s>\n", "[\033[0;31mERROR\033[0m]: Can't open", root);
+        printf("%s '%s'\n", "[\033[0;31mERROR\033[0m]: Can't open", root);
 
         return 0;
     }
@@ -147,7 +151,11 @@ uint32_t create_lifs(const char* disk, uint32_t previous, uint32_t start,
 
     while((ent = readdir(dir)) != NULL)
     {
-        ent_count++;
+        if(strcmp(ent->d_name, ".") != 0 
+            && strcmp(ent->d_name, "..") != 0)
+        {
+            ent_count++;
+        }
     }
 
     seekdir(dir, 0);
@@ -169,8 +177,7 @@ uint32_t create_lifs(const char* disk, uint32_t previous, uint32_t start,
 
             if(prev == 0)
             {
-                printf("%s '%s'\n", 
-                    "[\033[0;31mERROR\033[0m]: Can't open file: ", f_path);
+                return 0;
             }
         }
     }

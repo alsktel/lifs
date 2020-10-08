@@ -68,8 +68,6 @@ int write_header(const char* disk, lifs_header_t* header)
 
     if(header->previous != 0)
     {
-        printf("%d\n", header->size);
-
         fseek(dd, header->previous * _LIFS_SECTOR_SIZE_, 0);
         fseek(dd, _LIFS_HEADER_NEXT_FIELD_, SEEK_CUR);
         fwrite((void*)header + _LIFS_HEADER_SECTOR_FIELD_, 

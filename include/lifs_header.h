@@ -36,7 +36,7 @@ typedef struct
     uint32_t bitmap_size; // Bitmap size in sectors
     uint32_t uid_hi; // Higher 32 bit of UID (THIS-THIS-xxxx-xxxx)
     uint32_t uid_lo; // Lower 32 bit of UID (xxxx-xxxx-THIS-THIS)
-    uint32_t sys; // Global id of sector with system root FS header 
+    uint32_t sys; // Reserved for OS data 
     uint32_t mount; // Global id of sector with this FS mount directory
     uint32_t previous; // Global id of sector with previous FS header
     uint32_t next; // Global id of sector with previous FS header 

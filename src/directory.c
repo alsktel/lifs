@@ -11,6 +11,10 @@
 #include <lifs_file.h>
 #include <lifs_header.h>
 
+#define BOOT_FLAGS 0b00000000000000000000000000000001
+#define ROOT_FLAGS 0b00000000000000000000000000000010
+#define DATA_FLAGS 0b00000000000000000000000000000100
+
 uint32_t convert_dir(const char* path, const char* disk, uint32_t partition,
     uint32_t previous, uint32_t parent, lifs_bitmap_t* bitmap)
 {
@@ -128,7 +132,17 @@ uint32_t convert_dir(const char* path, const char* disk, uint32_t partition,
 uint32_t create_lifs(const char* disk, uint32_t previous, uint32_t start,
     uint32_t size, uint32_t label, const char* root)
 {
-    lifs_header_t* header = create_header(size, start, label, 0, previous);
+    uint32_t f = 0;
+
+    switch(label)
+    {
+        default: break;
+        case _LIFS_LABEL_BOOT_: f = BOOT_FLAGS; break;
+        case _LIFS_LABEL_ROOT_: f = ROOT_FLAGS; break;
+        case _LIFS_LABEL_DATA_: f = DATA_FLAGS; break;
+    }
+
+    lifs_header_t* header = create_header(size, start, label, f, previous);
     lifs_bitmap_t* bitmap = create_bitmap(size, 
         header->bitmap_start + header->sector);
 

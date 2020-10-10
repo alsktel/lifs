@@ -32,4 +32,5 @@ This tool is a part of [TSIX](https://github.com/eastev/tsix) project.
 
 
 Copyright © 2020 Alexander (eastev) E. <https://github.com/eastev>
+
 For any questions write on `eastevrud31@gmail.com`

@@ -28,7 +28,7 @@ Follow these simple steps:
 To uninstall this tool use: `sudo make uninstall` or `sudo rm /bin/mklifs`
 
 ## Other
-This tool is a part of [TSIX](https://github.com/eastev/tsix) project.
+This tool is a part of [42IX](https://github.com/eastev/42ix) project.
 
 
 Copyright © 2020 Alexander (eastev) E. <https://github.com/eastev>

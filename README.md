@@ -17,7 +17,7 @@ Each partition has its own header. The header contains following fields
 |---------------|-----------------------------------------------------------|
 |   Signature   |   LIFS signature is always 0x5346494C ("LIFS")            |
 |    Version    |   LIFS version. Actual is 1.0                             |
-|    BS data    |   Reserved for [SXB](https://github.com/eastev/sxb) data  |
+|    BS data    |   Reserved for boot system data  |
 |     Label     |   LIFS has 3 types of labels: BOOT, ROOT, DATA            |
 |    Sector     |   Global id of this header disk sector                    |
 |     Size      |   LIFS size in sectors (sector is 512 bytes)              |
@@ -27,7 +27,7 @@ Each partition has its own header. The header contains following fields
 |  Bitmap size  |   Size of [bitmap](#bitmap) in sectors                    |
 |   UID higher  |   UID higher 32 bits                                      |
 |   UID lower   |   UID lower 32 bits                                       |
-|    System     |   Reserved for [TSIX](https://github.com/eastev/fsix) data|
+|    System     |   Reserved for OS data|
 |     Mount     |   Global id of sector with this partition mount directory |
 |   Previous|Global id of sector with previous partition header (if 0 - first)|
 |     Next      |Global id of sector with next partition header (if 0 - last)|
@@ -81,7 +81,7 @@ own lists.
 |-----------|---------------------------|
 |   dir     | Whether this unit is a directory|
 |   link    | Whether this unit is a link entry of other unit|
-|   boot| Whether this file is a part of [SXB](https://github.com/eastev/sxb)|
+|   os| Whether this file is a part of OS |
 |   dev     | Whether this file is a device entry |
 | encrypted | Whether this file is encrypted |
 |  accessed | Whether this file is accessed |

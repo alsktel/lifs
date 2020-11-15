@@ -11,7 +11,7 @@
 #include <lifs_bitmap.h>
 
 #define _LIFS_SIGNATURE_ 0x5346494C // "LIFS"
-#define _LIFS_VERSION_ 0x302E3120 // "1.0"
+#define _LIFS_VERSION_ 0x312E3120 // "1.0"
 #define _LIFS_HEADER_MAIN_SIZE_ 64
 #define _LIFS_HEADER_SIZE_ 512
 #define _LIFS_HEADER_RESERVED_SIZE_ 512 - 64

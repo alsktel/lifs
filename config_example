@@ -1,0 +1,13 @@
+# Boot partition
+PART=BOOT
+SIZE=4K
+DIR=bin/boot
+# Root partition
+PART=ROOT
+SIZE=4K
+DIR=bin/root
+# Data partition
+PART=DATA
+SIZE=4K
+DIR=bin/data
+END

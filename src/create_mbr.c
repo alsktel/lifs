@@ -31,9 +31,21 @@ int create_mbr(const char* disk, const char* mbr_img)
         return 1;
     }
 
-    uint8_t* buffer = NULL;
+    uint8_t buffer[_LIFS_SECTOR_SIZE_];
 
-    if(fread(buffer, _LIFS_SECTOR_SIZE_, 1, fd) != _LIFS_SECTOR_SIZE_)
+    if(fseek(fd, _LIFS_SECTOR_SIZE_, 0))
+    {
+        fclose(fd);
+        fclose(dd);
+
+        printf("\033[0;31mERROR\033[0m: MBR image is damaged!\n\n\n");
+
+        return 2;
+    }
+
+    fseek(fd, 0, 0);
+
+    if(fread(buffer, _LIFS_SECTOR_SIZE_, 1, fd) != 1)
     {
         fclose(fd);
         fclose(dd);
@@ -43,18 +55,18 @@ int create_mbr(const char* disk, const char* mbr_img)
         return 1;
     }
 
-    if(!((buffer[_LIFS_SECTOR_SIZE_ - 1 - 1] == MBR_SIG >> __CHAR_BIT__) &&
-        buffer[_LIFS_SECTOR_SIZE_ - 1] == MBR_SIG & UINT8_MAX))
+    if(!((buffer[_LIFS_SECTOR_SIZE_ - 1 - 1] == (MBR_SIG >> __CHAR_BIT__)) &&
+        buffer[_LIFS_SECTOR_SIZE_ - 1] == (MBR_SIG & UINT8_MAX)))
     {
         fclose(fd);
         fclose(dd);
 
         printf("\033[0;31mERROR\033[0m: MBR image is damaged!\n\n\n");
 
-        return -1;
+        return 3;
     }
 
-    if(fwrite(buffer, _LIFS_SECTOR_SIZE_, 1, dd) != _LIFS_SECTOR_SIZE_)
+    if(fwrite(buffer, _LIFS_SECTOR_SIZE_, 1, dd) != 1)
     {
         fclose(dd);
         fclose(fd);

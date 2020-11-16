@@ -110,5 +110,4 @@ Each sector with with file data has pointers to previous and next sectors in dat
 ## Developing of LIFS
 Current version of LIFS is 1.1. Further plans of developing is adding more flags during developing of [42IX](https://github.com/eastev/42ix).
 
-You can develop and use it in terms of GNU General Public License v3.0, 
-**but you must save first 64 bits of LIFS header**.
+You can develop and use it in terms of GNU General Public License v3.0

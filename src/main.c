@@ -12,7 +12,7 @@
 #include <lifs_diskcrt.h>
 
 #define MIN_ARGS 3
-#define VERSION "2.0"
+#define VERSION "2.1"
 
 void print_help()
 {
@@ -124,10 +124,10 @@ int main(int argc, const char** argv)
                             
                     return -3;
                 case 'K': size *= 2; p_offset *= p_offset == 1 ? 
-                        1 : 2 * 1024 * 1024; 
+                        1 : 2; 
                     break;
                 case 'M': size *= 2 * 1024; p_offset *= p_offset == 1 ? 
-                        1 : 2 * 1024 * 1024;
+                        1 : 2 * 1024;
                     break;
                 case 'G': 
                     size *= 2 * 1024 * 1024; p_offset *= p_offset == 1 ? 
@@ -158,11 +158,26 @@ int main(int argc, const char** argv)
 
     for(int i = 1; i < argc; i++)
     {
+        if(!strcmp(argv[i], "-c") || !strcmp(argv[i], "--conf"))
+        {
+            config = malloc(strlen(argv[i + 1]));
+            strcpy(config, argv[i + 1]);
+
+            break;
+        }
+    }
+
+    for(int i = 1; i < argc; i++)
+    {
         if(!strcmp(argv[i], "-b") || !strcmp(argv[i], "--boot"))
         {
-            if(create_mbr(disk, argv[i + 1]))
+            int err;
+
+            if((err = create_mbr(disk, argv[i + 1])) != 0)
             {
-                return 4;;
+                printf("LIFS creation\033[1;31m error\033[0m! Exit...\n\n\n");
+
+                return err;
             }
 
             break;
@@ -171,10 +186,22 @@ int main(int argc, const char** argv)
 
     if(partitioning(p_offset, disk, size, config))
     {
+        if(config != NULL)
+        {
+            free(config);
+        }   
+
+        printf("\nLIFS creation\033[1;31m error\033[0m! Exit...\n\n\n");
+
         return 128;
     }
 
-    printf("\n\nLifs created\033[0;32m successfully\033[0m!\n\n\n");
+    if(config != NULL)
+    {
+        free(config);
+    }
+
+    printf("\nLifs created\033[0;32m successfully\033[0m!\n\n\n");
 
     return 0;
 }

@@ -1,4 +1,4 @@
-# LIFS cross-platform tool v. 2.1
+# LIFS cross-platform tool v. 2.2
 This tool is created to help in 42IX development, LIFS disk images creation and
 possibility to create LIFS under Linux and Windows.
 

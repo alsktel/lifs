@@ -12,7 +12,7 @@
 #include <lifs_diskcrt.h>
 
 #define MIN_ARGS 3
-#define VERSION "2.1"
+#define VERSION "2.2"
 
 void print_help()
 {
@@ -24,6 +24,7 @@ void print_help()
     printf("-c or --conf\tConfig file\tMake LIFS with configs from file\n");
     printf("-s or --size\tFormat\t\tOther format of size, see below\n");
     printf("-r or --skip\tSize\t\tSkip some place from disk start\n");
+    printf("-w or --warn\tNone\t\tSkip disk formatting warning DANGEROUS!\n");
     printf("\n\033[1mOther format of size\033[0m: you can pass size in other");
     printf(" units (default in 512-bytes disk sectors) by:\n");
     printf("K - kilobytes\nM - megabytes\nG - gigabytes\n");
@@ -83,7 +84,18 @@ int main(int argc, const char** argv)
         return 0;
     }
 
-    if(argc < MIN_ARGS || (argc - 1) % 2 != 0)
+    int odd_f = 0;
+
+    for(int i = 1; i < argc; i++)
+    {
+        if(!strcmp(argv[i], "-w") || !strcmp(argv[i], "--warn"))
+        {
+            odd_f = 1;
+            break;
+        }
+    }
+
+    if(argc < MIN_ARGS || ((argc - 1) % 2 != 0 && !odd_f))
     {
         printf("\033[0;31mERROR\033[0m: Too few arguments!\n\n");
         print_help();
@@ -147,11 +159,32 @@ int main(int argc, const char** argv)
     
     const char* disk = argv[argc - 1 - 1];
 
-    if(format_disk(disk, size))
+    if(odd_f)
     {
-        printf("\033[0;31mERROR\033[0m: Can't format disk!\n\n\n");
+        FILE* dd = fopen(disk, "wb");
 
-        return -128;
+        if(dd == NULL)
+        {
+            printf("\033[0;31mERROR\033[0m: Can't format disk!\n\n\n");
+
+            return -128;
+        }
+
+        fseek(dd, size * _LIFS_SECTOR_SIZE_ - 1, 0);
+        fputc(0, dd);
+
+        fclose(dd);
+
+        printf("\n");
+    }
+    else
+    {
+        if(format_disk(disk, size))
+        {
+            printf("\033[0;31mERROR\033[0m: Can't format disk!\n\n\n");
+
+            return -128;
+        }
     }
 
     const char* config = NULL;

@@ -2,6 +2,9 @@
 This tool is created to help in 42IX development, LIFS disk images creation and
 possibility to create LIFS under Linux and Windows.
 
+## Archived!
+**Further development is a part of XxxxStorageSystem (link will be later).**
+
 ![](Screenshot.png)
 
 ## About LIFS 
